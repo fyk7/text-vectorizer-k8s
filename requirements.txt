@@ -1,0 +1,18 @@
+numpy
+pandas
+wheel
+# torch
+# transformers 4.13.0 では失敗する
+# transformers==4.5.0
+# fugashi==1.1.0
+# ipadic==1.0.0
+
+# for fastapi
+aiofiles
+celery
+fastapi
+pydantic
+flower
+pytest
+redis
+uvicorn
