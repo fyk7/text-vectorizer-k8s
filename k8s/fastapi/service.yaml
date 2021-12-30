@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: fastapi-service
+spec:
+  selector:
+    pod: fastapi
+  ports:
+  - protocol: TCP
+    port: 8008
+    targetPort: 8000
+  # type: NodePort
+  type: LoadBalancer

@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+
+  web:
+    image: fyk7/celery-fastapi-text-vect-api
+    build:
+      dockerfile: Dockerfile.api
+      context: .
+    ports:
+      - 8008:8000
+
+  worker:
+    image: fyk7/celery-fastapi-text-vect-worker
+    build:
+      dockerfile: Dockerfile.worker
+      context: .
+
+  redis:
+    image: redis:6-alpine
+
+  # dashboard:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./src/worker
+  #   command:  flower --app=worker.celery --port=5555 --broker=redis://redis:6379/0
+  #   ports:
+  #     - 5556:5555
