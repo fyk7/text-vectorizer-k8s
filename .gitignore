@@ -145,3 +145,6 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/python
 
 tmp/
+# TODO 以下のファイルの扱いを詳細に調査する(一旦gitignore)
+.terraform/
+.terraform.lock.hcl
