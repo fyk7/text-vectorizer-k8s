@@ -1,6 +1,6 @@
 # declare variables
 GCP_PROJECT=$(gcloud info --format='value(config.project)')
-TERRAFORM_SA=terraform-service-account
+TERRAFORM_SA=terraform-service-account-v2
 GCS_BUCKET=text-vect-terraform
 TERRAFORM_SA_EMAIL=$(gcloud iam service-accounts list \
   --project=$GCP_PROJECT \
