@@ -16,11 +16,12 @@ spec:
     spec:
       containers:
         - name: fastapi
-          image: fyk7/celery-fastapi-text-vect-api:latest
+          # image: fyk7/celery-fastapi-text-vect-api:latest
+          image: gcr.io/text-vectorize/fyk7/celery-fastapi-text-vect-api
           ports:
             - containerPort: 8000
           imagePullPolicy: IfNotPresent
           env:
             - name: REDIS_HOST
-              # .<name_space>であることに注意
+              # <service_name>.<namespace>であることに注意
               value: redis-service.redis-textvec

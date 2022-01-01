@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: celery-worker
-          image: fyk7/celery-fastapi-text-vect-worker:latest
+          # image: fyk7/celery-fastapi-text-vect-worker:latest
+          image: gcr.io/text-vectorize/fyk7/celery-fastapi-text-vect-worker
           # command: ['celery', '-A', 'src.worker.worker.celery', 'worker', '-l', 'info']
           imagePullPolicy: IfNotPresent
           env:
