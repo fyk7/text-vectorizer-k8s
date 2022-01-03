@@ -1,4 +1,4 @@
-# namespace: local-text-vec
+# TODO 環境ごとにどのようにnamespaceを設定するかを再考
 namePrefix: local-
 resources:
 - ../base/celery/worker-deployment.yaml
