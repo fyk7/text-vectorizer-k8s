@@ -1,0 +1,11 @@
+# namespace: local-text-vec
+namePrefix: local-
+resources:
+- ../base/celery/worker-deployment.yaml
+- ../base/celery/namespace.yaml
+- ../base/fastapi/deployment.yaml
+- ../base/fastapi/service.yaml
+- ../base/fastapi/namespace.yaml
+- ../base/redis/deployment.yaml
+- ../base/redis/service.yaml
+- ../base/redis/namespace.yaml
