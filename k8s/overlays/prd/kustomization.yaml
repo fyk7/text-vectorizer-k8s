@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: textvec
+bases:
+- ../../base
+namePrefix: prd-
+namespace: textvec-prd
+commonLabels:
+  app: textvec-prd
+images:
+  - name: fastapi
+    newName: gcr.io/text-vec/fyk7/celery-fastapi-text-vect-api
+  - name: celery-worker
+    newName: gcr.io/text-vec/fyk7/celery-fastapi-text-vect-worker 
+# replicas:
+# - name: fastapi
+#   count: 5
+patchesStrategicMerge:
+- ../../overlays/prd/fastapi/deployment.yaml

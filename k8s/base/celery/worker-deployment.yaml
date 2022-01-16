@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: celery-worker
-  namespace: celery-textvec
   labels:
     deployment: celery-worker
 spec:
@@ -17,8 +16,7 @@ spec:
     spec:
       containers:
         - name: celery-worker
-          # image: fyk7/celery-fastapi-text-vect-worker:latest
-          image: gcr.io/text-vec/fyk7/celery-fastapi-text-vect-worker
+          image: fyk7/celery-fastapi-text-vect-worker:latest
           # command: ['celery', '-A', 'src.worker.worker.celery', 'worker', '-l', 'info']
           imagePullPolicy: IfNotPresent
           env:

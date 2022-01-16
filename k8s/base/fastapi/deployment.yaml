@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: fastapi
-  namespace: fastapi-textvec
   labels:
     app: fastapi
 spec:
@@ -17,8 +16,7 @@ spec:
     spec:
       containers:
         - name: fastapi
-          # image: fyk7/celery-fastapi-text-vect-api:latest
-          image: gcr.io/text-vec/fyk7/celery-fastapi-text-vect-api
+          image: fyk7/celery-fastapi-text-vect-api:latest
           ports:
             - containerPort: 8000
           imagePullPolicy: IfNotPresent
