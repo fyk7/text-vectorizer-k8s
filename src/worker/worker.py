@@ -1,6 +1,11 @@
 import os
-from celery import Celery
-# from src.libs.vectrize_text import TextVectorizer
+import typing as t
+
+import numpy as np
+from celery import Celery, states
+from celery.exceptions import Ignore
+
+from src.libs.vectorize_text import TextVectorizer
 
 
 celery = Celery(__name__)
@@ -12,11 +17,22 @@ celery.conf.broker_url = REDIS_URL
 celery.conf.result_backend = REDIS_URL
 
 
-# 新しいタスクを追加したらdocker-compose up --buildすること
-# @celery.task(name='tasks.vectorize_text')
-# def vectorize_text(text: str) -> float:
-#     text = text[:256] if len(text) > 256 else text
-#     return TextVectorizer.vectorize(text).tolist()
+@celery.task(bind=True, name='tasks.vectorize_text')
+def vectorize_text(self, text: str) -> t.List[float]:
+    text = text[:256] if len(text) >= 256 else text
+    try:
+        res = TextVectorizer.vectorize(text)
+        if isinstance(res, np.ndarray):
+            res = res.tolist()
+    # TODO Specify Exception
+    except Exception as e:
+        self.update_state(
+            state = states.FAILURE,
+            meta = e
+        )
+        raise Ignore()
+    
+    return res
 
 
 @celery.task(name="create_task")
