@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: fastapi-config
 data:
+  # <service_name>.<namespace>であることに注意
   redis-endpoint: redis-service.redis-textvec

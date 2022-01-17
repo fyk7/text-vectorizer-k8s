@@ -22,5 +22,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: REDIS_HOST
-              # <service_name>.<namespace>であることに注意
-              value: redis-service.redis-textvec
+              valueFrom:
+                configMapKeyRef:
+                  name: fastapi-config
+                  key: redis-endpoint
