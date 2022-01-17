@@ -83,7 +83,7 @@ class TextVectorizer(object):
             else:
                 raise TypeError("引数の型は、np.array, pd.Series, List[float]のみ許容されています!")
             if tmp_vect.ndim != 2:
-                raise TypeError("calc_similarity_multiではベクトルの次元は二次元にしてください!")
+                raise ValueError("calc_similarity_multiではベクトルの次元は二次元にしてください!")
             return tmp_vect
 
         sent_vectors = __convert_vec_type_2dim(sent_vectors)
