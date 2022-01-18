@@ -48,7 +48,7 @@ class TextVectorizer(object):
         eps: float = 1e-9,
     ) -> float:
         
-        def __convert_vec_type(vect: t.Any) -> np.ndarray:
+        def __convert_vec2numpy(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
                 return vect
             elif isinstance(vect, pd.Series):
@@ -58,8 +58,8 @@ class TextVectorizer(object):
             else:
                 raise TypeError("引数は、np.array, pd.Series, List[float]のみ許容されています!")
 
-        vect1 = __convert_vec_type(vect1)
-        vect2 = __convert_vec_type(vect2)
+        vect1 = __convert_vec2numpy(vect1)
+        vect2 = __convert_vec2numpy(vect2)
         
         norm = np.linalg.norm(np.concatenate([vect1, vect2]))
         vect1 = vect1 / (norm + eps)
@@ -72,7 +72,7 @@ class TextVectorizer(object):
         eps: float = 1e-9,
     ) -> np.ndarray:
 
-        def __convert_vec_type_2dim(vect: t.Any) -> np.ndarray:
+        def __convert_vec2numpy_2dim(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
                 tmp_vect = vect
             elif isinstance(vect, pd.DataFrame):
@@ -85,7 +85,7 @@ class TextVectorizer(object):
                 raise ValueError("calc_similarity_multiではベクトルの次元は二次元にしてください!")
             return tmp_vect
 
-        sent_vectors = __convert_vec_type_2dim(sent_vectors)
+        sent_vectors = __convert_vec2numpy_2dim(sent_vectors)
 
         norm = np.linalg.norm(sent_vectors, axis=1, keepdims=True)
         sent_vectors_normalized = sent_vectors / (norm + eps)

@@ -5,7 +5,7 @@ import numpy as np
 from celery import Celery, states
 from celery.exceptions import Ignore
 
-from src.libs.vectorize_text import TextVectorizer
+from src.libs.text_vectorizer import TextVectorizer
 
 
 celery = Celery(__name__)
@@ -33,7 +33,6 @@ def vectorize_text(self, text: str) -> t.List[float]:
         )
         raise Ignore()
     
-
 
 @celery.task(name="create_task")
 def create_task(task_type):
