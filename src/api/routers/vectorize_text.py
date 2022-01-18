@@ -1,15 +1,17 @@
+import numpy as np
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
+from fastapi import Body
+
 from src.api.schema import (
     InputText,
+    OutputVector,
     TaskStatus,
     CalcSimilarityInput,
     CalcSimilarityResponse,
 )
-from src.worker.worker import vectorize_text
-from src.worker.worker import create_task
+from src.worker.worker import vectorize_text, create_task
 from src.libs.vectorize_text import TextVectorizer
-from fastapi.responses import JSONResponse
-from fastapi import Body
 
 
 router = APIRouter(
@@ -17,20 +19,32 @@ router = APIRouter(
     tags=['vectorize-text']
 )
 
-# Light weight task
+
 @router.post(
     '/text-similarity',
-    response_model=TaskStatus,
+    response_model=CalcSimilarityResponse,
     response_model_exclude_unset=True
 )
 def calc_text_similality(text_input: CalcSimilarityInput):
     text_similarity = \
         TextVectorizer.calc_similarity(text_input.sentence1, text_input.sentence2)
-    return CalcSimilarityResponse(text_similarity)
+    return CalcSimilarityResponse(text_similarity=text_similarity)
 
-# Heavy weight task
+
 @router.post(
-    '/vectorize',
+    '/vectrorize-sync',
+    response_model=OutputVector,
+    response_model_exclude_unset=True
+)
+def calc_text_similality(text_input: InputText):
+    text_vec = TextVectorizer.vectorize(text_input.sentence)
+    if isinstance(text_vec, np.ndarray):
+        text_vec = text_vec.tolist()
+    return OutputVector(vectorized_text=text_vec)
+
+
+@router.post(
+    '/vectorize-async',
     response_model=TaskStatus,
     response_model_exclude_unset=True
 )
@@ -39,15 +53,14 @@ def vectorize(text_input: InputText):
     return TaskStatus(id=task.id)
 
 
-@router.get('/{task_id}', response_model=TaskStatus)
+@router.get('/vectorize-async/{task_id}', response_model=TaskStatus)
 def check_status(task_id: str):
     result = vectorize_text.AsyncResult(task_id)
-    status = TaskStatus(
+    return TaskStatus(
         id=task_id,
         status=result.status,
         result=result.result
     )
-    return status
 
 
 @router.post("/test-tasks", status_code=201)

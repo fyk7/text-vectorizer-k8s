@@ -1,13 +1,12 @@
-from tkinter import W
 from pydantic import BaseModel
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Union
 
 class CalcSimilarityInput(BaseModel):
-    sentence1: List[float]
-    sentence2: List[float]
+    sentence1: List[Union[float, int]]
+    sentence2: List[Union[float, int]]
 
 class CalcSimilarityResponse(BaseModel):
-    text_similarity: float
+    text_similarity: Union[float, int]
 
 class InputText(BaseModel):
     sentence: str

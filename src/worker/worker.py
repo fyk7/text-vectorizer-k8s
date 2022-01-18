@@ -9,7 +9,7 @@ from src.libs.vectorize_text import TextVectorizer
 
 
 celery = Celery(__name__)
-REDIS_URL = "redis://{host}:{port}/1".format(
+REDIS_URL = "redis://{host}:{port}/0".format(
     host=os.getenv('REDIS_HOST', 'localhost'),
     port=os.getenv('REDIS_PORT', '6379')
 )
@@ -24,6 +24,7 @@ def vectorize_text(self, text: str) -> t.List[float]:
         res = TextVectorizer.vectorize(text)
         if isinstance(res, np.ndarray):
             res = res.tolist()
+        return res
     # TODO Specify Exception
     except Exception as e:
         self.update_state(
@@ -32,7 +33,6 @@ def vectorize_text(self, text: str) -> t.List[float]:
         )
         raise Ignore()
     
-    return res
 
 
 @celery.task(name="create_task")
