@@ -13,8 +13,7 @@ DEVICE = "gpu" if torch.cuda.is_available() else "cpu"
 
 class TextVectorizer(object):
     tokenizer = BertJapaneseTokenizer.from_pretrained(MODEL_NAME)
-    model = BertModel.from_pretrained(MODEL_NAME)
-    model = model.to(DEVICE)
+    model = BertModel.from_pretrained(MODEL_NAME).to(DEVICE)
 
     @staticmethod
     def vectorize(text: str) -> np.ndarray:
@@ -47,7 +46,7 @@ class TextVectorizer(object):
         vect1: t.Union[np.array, pd.Series, t.List[float]],
         vect2: t.Union[np.array, pd.Series, t.List[float]],
         eps: float = 1e-9,
-    ) -> np.array:
+    ) -> float:
         
         def __convert_vec_type(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
@@ -71,7 +70,7 @@ class TextVectorizer(object):
     def calc_similarity_multi(
         sent_vectors: t.Union[np.array, pd.DataFrame, t.List[float]],
         eps: float = 1e-9,
-    ) -> np.array:
+    ) -> np.ndarray:
 
         def __convert_vec_type_2dim(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
