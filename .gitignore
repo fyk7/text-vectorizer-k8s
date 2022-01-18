@@ -148,3 +148,5 @@ tmp/
 # TODO 以下のファイルの扱いを詳細に調査する(一旦gitignore)
 .terraform/
 .terraform.lock.hcl
+
+bert-cache/*

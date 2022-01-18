@@ -12,10 +12,9 @@ services:
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     volumes:
       - .:/usr/src/app
+      - ./bert-cache:/root/.cache/huggingface/transformers
     environment:
       - REDIS_HOST=redis
-      # - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      # - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
 
@@ -24,13 +23,12 @@ services:
     build:
       dockerfile: Dockerfile.worker
       context: .
-    command: celery --app=src.worker.worker.celery worker --loglevel=info --logfile=src/worker/logs/celery.log
+    command: celery --app=src.worker.worker.celery worker --pool=solo --loglevel=info --logfile=src/worker/logs/celery.log
     volumes:
       - .:/usr/src/app
+      - ./bert-cache:/root/.cache/huggingface/transformers
     environment:
       - REDIS_HOST=redis
-      # - CELERY_BROKER_URL=redis://redis:6379/0
-      # - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - web
       - redis

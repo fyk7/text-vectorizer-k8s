@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # TODO 相対パスをロバストにしたい、
-CMD ["celery", "-A", "src.worker.worker.celery", "worker", "-l", "info"]
+CMD ["celery", "-A", "src.worker.worker.celery", "worker", "--pool=solo", "--loglevel=info", "--logfile=src/worker/logs/celery.log"]
