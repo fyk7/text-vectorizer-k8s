@@ -11,6 +11,7 @@ MAX_LENGTH = 256
 DEVICE = "gpu" if torch.cuda.is_available() else "cpu"
 
 
+# TODO calc_similarity部分はtokenizer, modelに依存しないため、別のクラス・関数に切り出す
 class TextVectorizer(object):
     tokenizer = BertJapaneseTokenizer.from_pretrained(MODEL_NAME)
     model = BertModel.from_pretrained(MODEL_NAME).to(DEVICE)
@@ -43,8 +44,8 @@ class TextVectorizer(object):
 
     @staticmethod
     def calc_similarity(
-        vect1: t.Union[np.array, pd.Series, t.List[float]],
-        vect2: t.Union[np.array, pd.Series, t.List[float]],
+        sent_vector1: t.Union[np.array, pd.Series, t.List[float]],
+        sent_vector2: t.Union[np.array, pd.Series, t.List[float]],
         eps: float = 1e-9,
     ) -> float:
         
@@ -58,13 +59,15 @@ class TextVectorizer(object):
             else:
                 raise TypeError("引数は、np.array, pd.Series, List[float]のみ許容されています!")
 
-        vect1 = __convert_vec2numpy(vect1)
-        vect2 = __convert_vec2numpy(vect2)
-        
-        norm = np.linalg.norm(np.concatenate([vect1, vect2]))
-        vect1 = vect1 / (norm + eps)
-        vect2 = vect2 / (norm + eps)
-        return vect1.dot(vect2.T)
+        sent_vector1 = __convert_vec2numpy(sent_vector1)
+        sent_vector2 = __convert_vec2numpy(sent_vector2)
+
+        norm1 = np.linalg.norm(sent_vector1)
+        norm2 = np.linalg.norm(sent_vector2)
+        vect1_normarized =  sent_vector1 / (norm1 + eps)
+        vect2_normarized = sent_vector2 / (norm2 + eps)
+
+        return vect1_normarized.dot(vect2_normarized.T)
 
     @staticmethod
     def calc_similarity_multi(
