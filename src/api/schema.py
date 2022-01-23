@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional, Any, Union
 
 class CalcSimilarityInput(BaseModel):
@@ -12,8 +12,7 @@ class InputText(BaseModel):
     sentence: str
 
 class OutputVector(BaseModel):
-    # TODO 可能なら返却するベクトルの長さを指定する
-    vectorized_text: List[float]
+    vectorized_text: float = Field(..., min_items=256, max_items=256)
 
 class TaskStatus(BaseModel):
     id: str
