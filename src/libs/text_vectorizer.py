@@ -18,11 +18,17 @@ class TextVectorizer(object):
 
     @staticmethod
     def vectorize(text: str) -> np.ndarray:
+        """
+        文章をベクトル化する関数
+        Parameters
+        ----------
+        text : str
+             ベクトル化する文章
+        """
         if not isinstance(text, str):
             raise TypeError(f"引数はstring型にしてください!")
         if len(text) >= MAX_LENGTH:
             raise ValueError(f"文字数は{MAX_LENGTH}文字以下にしてください!")
-        # TODO tokenizerやmodelなど大きなオブジェクトを効率よく使い回す手法を調査
         encoding = TextVectorizer.tokenizer(
             text, 
             max_length=MAX_LENGTH, 
@@ -44,10 +50,19 @@ class TextVectorizer(object):
 
     @staticmethod
     def calc_similarity(
-        sent_vector1: t.Union[np.array, pd.Series, t.List[float]],
-        sent_vector2: t.Union[np.array, pd.Series, t.List[float]],
+        sent_vector1: t.Union[np.ndarray, pd.Series, t.List[float]],
+        sent_vector2: t.Union[np.ndarray, pd.Series, t.List[float]],
         eps: float = 1e-9,
     ) -> float:
+        """
+        二つのベクトル化された文章の類似度を算出する関数
+        Parameters
+        ----------
+        sent_vector1, sent_vector2 : t.Union[np.array, pd.Series, t.List[float]]
+            文章をベクトル化したもので、構成要素がfloatな一次元のベクトル
+        eps : float, default=1e-9
+            ベクトルを正規化する際のノルムが0の場合ZeroDevisionErrorを回避するための小さな数
+        """
         
         def __convert_vec2numpy(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
@@ -71,9 +86,21 @@ class TextVectorizer(object):
 
     @staticmethod
     def calc_similarity_multi(
-        sent_vectors: t.Union[np.array, pd.DataFrame, t.List[float]],
+        sent_vectors: t.Union[np.ndarray, pd.DataFrame, t.List[t.List[float]]],
         eps: float = 1e-9,
     ) -> np.ndarray:
+        """
+        最も類似している文章のindexの配列を返す
+        例) 戻り値が[1, 0, 0]の場合、
+        index=0の文章はindex=1の文章と最も類似していることとなる
+        index=1の文章はindex=0の文章と最も類似していることとなる
+        Parameters
+        ----------
+        sent_vectors : t.Union[np.array, pd.DataFrame, t.List[float]]
+            文章をベクトル化したもののリストで、構成要素がfloatな二次元のベクトル
+        eps : float, default=1e-9
+            ベクトルを正規化する際のノルムが0の場合ZeroDevisionErrorを回避するための小さな数
+        """
 
         def __convert_vec2numpy_2dim(vect: t.Any) -> np.ndarray:
             if isinstance(vect, np.ndarray):
