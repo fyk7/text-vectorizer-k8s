@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 import pandas as pd
 
-from src.libs.text_vectorizer import TextVectorizer
+from src.ml.text_vectorizer import TextVectorizer
 
 
 class TestTextVectorizer(object):

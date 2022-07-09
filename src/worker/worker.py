@@ -5,7 +5,7 @@ import numpy as np
 from celery import Celery, states
 from celery.exceptions import Ignore
 
-from src.libs.text_vectorizer import TextVectorizer
+from src.ml.text_vectorizer import TextVectorizer
 
 
 celery = Celery(__name__)

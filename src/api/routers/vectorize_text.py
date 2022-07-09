@@ -11,7 +11,7 @@ from src.api.schema import (
     CalcSimilarityResponse,
 )
 from src.worker.worker import vectorize_text, create_task
-from src.libs.text_vectorizer import TextVectorizer
+from src.ml.text_vectorizer import TextVectorizer
 
 
 router = APIRouter(
