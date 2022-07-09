@@ -11,13 +11,13 @@ from src.ml.metrics import SimilarityCalculator
 
 
 router = APIRouter(
-    prefix='/vectorize-text',
-    tags=['vectorize-text']
+    prefix='/text-vectorizer',
+    tags=['Text Vectorizer']
 )
 
 
 @router.post(
-    '/text-similarity',
+    '/similarity',
     response_model=CalcSimilarityResponse,
     response_model_exclude_unset=True
 )
@@ -30,7 +30,7 @@ def calc_text_similality(text_input: CalcSimilarityInput):
 
 
 @router.post(
-    '/vectorize-async',
+    '/vectorize',
     response_model=TaskStatus,
     response_model_exclude_unset=True
 )
@@ -39,7 +39,7 @@ def vectorize(text_input: InputText):
     return TaskStatus(id=task.id)
 
 
-@router.get('/vectorize-async/{task_id}', response_model=TaskStatus)
+@router.get('/vectorize/{task_id}', response_model=TaskStatus)
 def check_status(task_id: str):
     result = vectorize_text.AsyncResult(task_id)
     return TaskStatus(
