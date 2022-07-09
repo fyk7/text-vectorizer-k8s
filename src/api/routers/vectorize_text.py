@@ -1,50 +1,36 @@
-import numpy as np
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
-from fastapi import Body
 
 from src.api.schema import (
     InputText,
-    OutputVector,
     TaskStatus,
     CalcSimilarityInput,
     CalcSimilarityResponse,
 )
-from src.worker.worker import vectorize_text, create_task
-from src.libs.text_vectorizer import TextVectorizer
+from src.worker.worker import vectorize_text
+from src.ml.metrics import SimilarityCalculator
 
 
 router = APIRouter(
-    prefix='/vectorize-text',
-    tags=['vectorize-text']
+    prefix='/text-vectorizer',
+    tags=['Text Vectorizer']
 )
 
 
 @router.post(
-    '/text-similarity',
+    '/similarity',
     response_model=CalcSimilarityResponse,
     response_model_exclude_unset=True
 )
 def calc_text_similality(text_input: CalcSimilarityInput):
-    text_similarity = \
-        TextVectorizer.calc_similarity(text_input.sentence1, text_input.sentence2)
-    return CalcSimilarityResponse(text_similarity=text_similarity)
+    return CalcSimilarityResponse(
+        text_similarity=SimilarityCalculator.calc_similarity(
+            text_input.sentence1, text_input.sentence2
+        )
+    )
 
 
 @router.post(
-    '/vectrorize-sync',
-    response_model=OutputVector,
-    response_model_exclude_unset=True
-)
-def calc_text_similality(text_input: InputText):
-    text_vec = TextVectorizer.vectorize(text_input.sentence)
-    if isinstance(text_vec, np.ndarray):
-        text_vec = text_vec.tolist()
-    return OutputVector(vectorized_text=text_vec)
-
-
-@router.post(
-    '/vectorize-async',
+    '/vectorize',
     response_model=TaskStatus,
     response_model_exclude_unset=True
 )
@@ -53,7 +39,7 @@ def vectorize(text_input: InputText):
     return TaskStatus(id=task.id)
 
 
-@router.get('/vectorize-async/{task_id}', response_model=TaskStatus)
+@router.get('/vectorize/{task_id}', response_model=TaskStatus)
 def check_status(task_id: str):
     result = vectorize_text.AsyncResult(task_id)
     return TaskStatus(
@@ -61,21 +47,3 @@ def check_status(task_id: str):
         status=result.status,
         result=result.result
     )
-
-
-@router.post("/test-tasks", status_code=201)
-def run_task(payload = Body(...)):
-    task_type = payload["type"]
-    task = create_task.delay(int(task_type))
-    return JSONResponse({"task_id": task.id})
-
-
-@router.get("/test-tasks/{task_id}")
-def get_status(task_id: str):
-    task_result = create_task.AsyncResult(task_id)
-    result = {
-        "task_id": task_id,
-        "task_status": task_result.status,
-        "task_result": task_result.result
-    }
-    return JSONResponse(result)

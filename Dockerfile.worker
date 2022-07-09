@@ -16,6 +16,5 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
-# TODO 相対パスをロバストにしたい、
-# --pool=soloオプションを指定しないと、celeryのSTATUSが常にPENDINGのままになってしまう
+# Without the --pool=solo option, the STATUS of the celery will always remain PENDING
 CMD ["celery", "-A", "src.worker.worker.celery", "worker", "--pool=solo", "--loglevel=info", "--logfile=src/worker/logs/celery.log"]
