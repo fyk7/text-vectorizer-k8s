@@ -25,7 +25,6 @@ def vectorize_text(self, text: str) -> t.List[float]:
         if isinstance(res, np.ndarray):
             res = res.tolist()
         return res
-    # TODO Specify Exception
     except Exception as e:
         self.update_state(
             state = states.FAILURE,
