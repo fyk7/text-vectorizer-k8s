@@ -1,16 +1,12 @@
-import numpy as np
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
-from fastapi import Body
 
 from src.api.schema import (
     InputText,
-    OutputVector,
     TaskStatus,
     CalcSimilarityInput,
     CalcSimilarityResponse,
 )
-from src.worker.worker import vectorize_text, create_task
+from src.worker.worker import vectorize_text
 from src.ml.metrics import SimilarityCalculator
 
 
@@ -51,21 +47,3 @@ def check_status(task_id: str):
         status=result.status,
         result=result.result
     )
-
-
-@router.post("/test-tasks", status_code=201)
-def run_task(payload = Body(...)):
-    task_type = payload["type"]
-    task = create_task.delay(int(task_type))
-    return JSONResponse({"task_id": task.id})
-
-
-@router.get("/test-tasks/{task_id}")
-def get_status(task_id: str):
-    task_result = create_task.AsyncResult(task_id)
-    result = {
-        "task_id": task_id,
-        "task_status": task_result.status,
-        "task_result": task_result.result
-    }
-    return JSONResponse(result)

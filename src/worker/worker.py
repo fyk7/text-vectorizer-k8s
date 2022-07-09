@@ -32,9 +32,3 @@ def vectorize_text(self, text: str) -> t.List[float]:
         )
         raise Ignore()
     
-
-@celery.task(name="create_task")
-def create_task(task_type):
-    import time
-    time.sleep(int(task_type) * 5)
-    return True
