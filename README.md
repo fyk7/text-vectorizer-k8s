@@ -1,7 +1,5 @@
 # ml-fastapi-celery
 # Features
-## Infrastructure Architecture
-<img src="img/text_vectorizer.drawio.png" alt="cloud architecture" title="cloud architecture">
 
 ## Text vectorizer based on BERT
 - [TextVectorizer](https://github.com/fyk7/ml-fastapi-celery/blob/master/src/libs/text_vectorizer.py)
@@ -28,16 +26,6 @@ $ docker-compose-k8s build
 $ kustomize build k8s/overlays/local | kubectl apply -f -
 $ kustomize build k8s/overlays/local | kubectl delete -f -
 ```
-
-## Future Work
-- resource, readiness prove, liveness proveの追加及び各種パラメータの追加
-- 適切なNodeにPodを配置する
-- BERTのパラメータの置き場をpersistent volumeに作成 or gcsに置いて利用時にキャッシュ
-- Ingress
-- fluented
-- Github Actions CI
-- Argo CD
-- FastapiとTextVectorizerの結合をさらに疎にする
 
 ## References
 - https://github.com/gitumarkk/kubernetes_django
