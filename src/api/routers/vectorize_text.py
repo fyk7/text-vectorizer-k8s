@@ -11,7 +11,7 @@ from src.api.schema import (
     CalcSimilarityResponse,
 )
 from src.worker.worker import vectorize_text, create_task
-from src.ml.text_vectorizer import TextVectorizer
+from src.ml.metrics import SimilarityCalculator
 
 
 router = APIRouter(
@@ -26,21 +26,11 @@ router = APIRouter(
     response_model_exclude_unset=True
 )
 def calc_text_similality(text_input: CalcSimilarityInput):
-    text_similarity = \
-        TextVectorizer.calc_similarity(text_input.sentence1, text_input.sentence2)
-    return CalcSimilarityResponse(text_similarity=text_similarity)
-
-
-@router.post(
-    '/vectrorize-sync',
-    response_model=OutputVector,
-    response_model_exclude_unset=True
-)
-def calc_text_similality(text_input: InputText):
-    text_vec = TextVectorizer.vectorize(text_input.sentence)
-    if isinstance(text_vec, np.ndarray):
-        text_vec = text_vec.tolist()
-    return OutputVector(vectorized_text=text_vec)
+    return CalcSimilarityResponse(
+        text_similarity=SimilarityCalculator.calc_similarity(
+            text_input.sentence1, text_input.sentence2
+        )
+    )
 
 
 @router.post(
