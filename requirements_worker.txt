@@ -1,0 +1,11 @@
+numpy
+wheel
+torch
+transformers==4.5.0
+fugashi==1.1.0
+ipadic==1.0.0
+# for celery
+aiofiles
+celery
+redis
+flower
