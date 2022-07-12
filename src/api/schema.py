@@ -11,8 +11,8 @@ class CalcSimilarityResponse(BaseModel):
 class InputText(BaseModel):
     sentence: str
 
-# class OutputVector(BaseModel):
-#     vectorized_text: float = Field(..., min_items=256, max_items=256)
+class OutputVector(BaseModel):
+    vectorized_text: float = Field(..., min_items=256, max_items=256)
 
 class TaskStatus(BaseModel):
     id: str
